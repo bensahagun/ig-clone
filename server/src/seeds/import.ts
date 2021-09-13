@@ -3,8 +3,7 @@ import posts from './posts.json';
 import hashtags from './hashtags.json';
 import emojis from './emojis.json';
 import { uri } from '../config/mongoose';
-import { User, Post, Comment, Hashtag } from '../models';
-import { IUser, IPost } from '../models';
+import { User, Post, Comment, Hashtag, IPost, IUser } from '../models';
 import mongoose from 'mongoose';
 
 async function init() {
@@ -25,11 +24,11 @@ async function init() {
   console.log('Start: Add users...');
 
   const userPromises = users.map((user) => {
-    new User({
+    return new User({
       ...user,
-      followerIds: [],
-      followingIds: [],
-      postIds: [],
+      followers: [],
+      usersFollowed: [],
+      posts: [],
       dateUpdated: null,
     }).save();
   });
@@ -43,11 +42,11 @@ async function init() {
   console.log('Start: Add posts...');
 
   const postPromises = posts.map((post, index) => {
-    new Post({
+    return new Post({
       ...post,
       photoURL: `https://picsum.photos/seed/${post.seed}/1228/1228`,
-      authorId: userArr[Math.ceil((index + 1) / 5)],
-      commentIds: [],
+      author: userArr[Math.ceil((index + 1) / 5) - 1],
+      comments: [],
       likes: [],
       hashtags: [],
       dateUpdated: null,
@@ -55,22 +54,42 @@ async function init() {
   });
 
   const postArr = await Promise.all(postPromises).then((res) => {
-    console.log(`Done: Adding ${res.length} users...`);
+    console.log(`Done: Adding ${res.length} posts...`);
     return res;
   });
 
-  console.log('Updating users `postIds` field ...');
+  //Update users
+  console.log('Start: Updating users `postIds` field ...');
 
-  // const updateUsersPromises = postArr.map((post) => {
-  //   User.findById(post.authorId)
-  //     .exec()
-  //     .then((doc) => {
-  //       if (!doc) return;
+  const groupBy = (objArr: IPost[], key: string) => {
+    return objArr.reduce((acc, obj) => {
+      let keyName = obj[key].id;
 
-  //       doc.postIds = [...doc.postIds, post._id];
-  //       return doc.save();
-  //     });
-  // });
+      if (!acc[keyName]) {
+        acc[keyName] = [];
+      }
+
+      acc[keyName].push(obj);
+      return acc;
+    }, {});
+  };
+
+  const groupedPostArr = groupBy(postArr, 'author');
+
+  let updateUserPromises: Promise<IUser>[] = [];
+
+  for (const index in groupedPostArr) {
+    const user = await User.findById(index).exec();
+
+    if (!user) continue;
+
+    user.posts = groupedPostArr[index];
+    updateUserPromises.push(user.save());
+  }
+
+  Promise.all(updateUserPromises).then((res) => {
+    console.log('Done: Updating users `postIds` field ...');
+  });
 }
 
 init();

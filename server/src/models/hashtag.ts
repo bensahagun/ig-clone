@@ -2,7 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 
 const schema = new mongoose.Schema({
   name: String,
-  postIds: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
+  posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
   dateCreated: { type: Date, default: Date.now },
   dateUpdated: Date,
 });
