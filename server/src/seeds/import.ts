@@ -37,7 +37,6 @@ async function init() {
     console.log(`Done: Adding ${res.length} users...`);
     return res;
   });
-
   //Posts
   console.log('Start: Add posts...');
 
@@ -57,7 +56,6 @@ async function init() {
     console.log(`Done: Adding ${res.length} posts...`);
     return res;
   });
-
   //Update users
   console.log('Start: Updating users `postIds` field ...');
 
@@ -87,9 +85,25 @@ async function init() {
     updateUserPromises.push(user.save());
   }
 
-  Promise.all(updateUserPromises).then((res) => {
+  await Promise.all(updateUserPromises).then((res) => {
     console.log('Done: Updating users `postIds` field ...');
   });
+
+  //EMOJIS
+
+  const getEmojis = () => {
+    return emojis
+      .sort(() => Math.random() - Math.random())
+      .slice(0, Math.floor(Math.random() * 3) + 1)
+      .join(' ');
+  };
+
+  const updatePostPromises = postArr.map((post) => {
+    post.caption = post.caption.concat(' ', getEmojis());
+    return post.save();
+  });
+
+  const updatedPosts = await Promise.all(updatePostPromises).catch((err) => console.log(err));
 }
 
 init();
