@@ -1,4 +1,12 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
+import { IPost } from './post';
+
+export interface IHashtag extends Document<Schema.Types.ObjectId> {
+  name: string;
+  posts: IPost[];
+  dateCreated: Date;
+  dateUpdate: Date;
+}
 
 const schema = new mongoose.Schema({
   name: String,
@@ -7,6 +15,6 @@ const schema = new mongoose.Schema({
   dateUpdated: Date,
 });
 
-const Hashtag = mongoose.model('Hashtag', schema);
+const Hashtag = mongoose.model<IHashtag>('Hashtag', schema);
 
 export default Hashtag;

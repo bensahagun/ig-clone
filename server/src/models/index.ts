@@ -4,3 +4,4 @@ export { default as Comment } from './comment';
 export { default as Hashtag } from './hashtag';
 export { IUser } from './user';
 export { IPost } from './post';
+export { IHashtag } from './hashtag';

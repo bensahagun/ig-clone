@@ -3,7 +3,7 @@ import posts from './posts.json';
 import hashtags from './hashtags.json';
 import emojis from './emojis.json';
 import { uri } from '../config/mongoose';
-import { User, Post, Comment, Hashtag, IPost, IUser } from '../models';
+import { User, Post, Comment, Hashtag, IPost, IUser, IHashtag } from '../models';
 import mongoose from 'mongoose';
 
 async function init() {
@@ -98,12 +98,49 @@ async function init() {
       .join(' ');
   };
 
+  console.log('Start: Updating posts caption for emojis ...');
+
   const updatePostPromises = postArr.map((post) => {
     post.caption = post.caption.concat(' ', getEmojis());
     return post.save();
   });
 
-  const updatedPosts = await Promise.all(updatePostPromises).catch((err) => console.log(err));
+  const postsWithEmojis = await Promise.all(updatePostPromises).then((res) => {
+    console.log(`Done: Updating emojis for ${res.length} posts...`);
+    return res;
+  });
+
+  //Import hashtags
+
+  console.log('Start: Adding hashtags ...');
+
+  const hashtagPromises = hashtags.map((tag) => {
+    return new Hashtag({
+      ...tag,
+      dateUpdated: null,
+    }).save();
+  });
+
+  const hashtagArr = await Promise.all(hashtagPromises).then((res) => {
+    console.log(`Done: Adding ${res.length} hashtags...`);
+    return res;
+  });
+
+  console.log('Start: Updating posts `hashtags` ...');
+
+  const getHashtags = () => {
+    return hashtagArr.sort(() => Math.random() - Math.random()).slice(0, Math.floor(Math.random() * 2) + 1);
+  };
+
+  const updatePostPromises2 = postsWithEmojis.map((post) => {
+    post.hashtags = getHashtags();
+    return post.save();
+  });
+
+  const postsWithHashtags = await Promise.all(updatePostPromises2).then((res) => {
+    console.log(`Done: Updating ${res.length} post for hashtags...`);
+    return res;
+  });
 }
 
 init();

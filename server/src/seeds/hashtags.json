@@ -15,16 +15,16 @@
     "name": "B2C"
   },
   {
-    "name": "turn-key"
+    "name": "turnkey"
   },
   {
     "name": "enterprise"
   },
   {
-    "name": "clicks-and-mortar"
+    "name": "clicksandmortar"
   },
   {
-    "name": "bricks-and-clicks"
+    "name": "bricksandclicks"
   },
   {
     "name": "sexy"
@@ -36,16 +36,16 @@
     "name": "seamless"
   },
   {
-    "name": "end-to-end"
+    "name": "endtoend"
   },
   {
-    "name": "best-of-breed"
+    "name": "bestofbreed"
   },
   {
     "name": "revolutionary"
   },
   {
-    "name": "dot-com"
+    "name": "dotcom"
   },
   {
     "name": "collaborative"
@@ -54,28 +54,28 @@
     "name": "holistic"
   },
   {
-    "name": "front-end"
+    "name": "frontend"
   },
   {
-    "name": "next-generation"
+    "name": "nextgeneration"
   },
   {
     "name": "global"
   },
   {
-    "name": "world-class"
+    "name": "worldclass"
   },
   {
-    "name": "plug-and-play"
+    "name": "plugandplay"
   },
   {
-    "name": "bricks-and-clicks"
+    "name": "bricksandclicks"
   },
   {
     "name": "distributed"
   },
   {
-    "name": "value-added"
+    "name": "valueadded"
   },
   {
     "name": "global"
@@ -87,6 +87,6 @@
     "name": "proactive"
   },
   {
-    "name": "end-to-end"
+    "name": "endtoend"
   }
 ]
