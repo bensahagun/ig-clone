@@ -1,13 +1,16 @@
 import mongoose, { Schema, Document } from 'mongoose';
 import { IUser } from './user';
+import { IComment } from './comment';
+import { ILike } from './like';
+import { IHashtag } from './hashtag';
 
 export interface IPost extends Document<Schema.Types.ObjectId> {
   author: IUser['_id'];
   photoURL: string;
   caption: string;
-  comments: Document['_id'][];
-  likes: Document['_id'][];
-  hashtags: Document['_id'][];
+  comments: IComment['_id'][];
+  likes: ILike['_id'][];
+  hashtags: IHashtag['_id'][];
   dateCreated: Date;
   dateUpdated: Date;
 }
