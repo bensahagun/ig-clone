@@ -5,12 +5,12 @@ import { ILike } from './like';
 import { IHashtag } from './hashtag';
 
 export interface IPost extends Document<Schema.Types.ObjectId> {
-  author: IUser['_id'];
+  author: IUser;
   photoURL: string;
   caption: string;
-  comments: IComment['_id'][];
-  likes: ILike['_id'][];
-  hashtags: IHashtag['_id'][];
+  comments: IComment[];
+  likes: ILike[];
+  hashtags: IHashtag[];
   dateCreated: Date;
   dateUpdated: Date;
 }

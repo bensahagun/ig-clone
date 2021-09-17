@@ -8,9 +8,9 @@ export interface IUser extends Document<Schema.Types.ObjectId> {
   emailAddress: string;
   profilePhotoURL: string;
   isNewUser: boolean;
-  followers: IUser['_id'][];
-  usersFollowed: IUser['_id'][];
-  posts: IPost['_id'][];
+  followers: IUser[];
+  usersFollowed: IUser[];
+  posts: IPost[];
   dateCreated: Date;
   dateUpdated: Date;
 }
