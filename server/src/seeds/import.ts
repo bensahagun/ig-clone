@@ -126,29 +126,38 @@ async function init() {
     return res;
   });
 
-  console.log('Start: Updating posts `hashtags` and hashtag `posts`...');
+  console.log('Start: Updating posts `hashtags`...');
 
   const getHashtags: () => IHashtag[] = () => {
     return hashtagArr.sort(() => Math.random() - Math.random()).slice(0, Math.floor(Math.random() * 2) + 1);
   };
 
-  postsWithEmojis.forEach(async (post: IPost) => {
+  const updatePostPromises2 = postsWithEmojis.map((post: IPost) => {
     const tags = getHashtags();
 
     post.hashtags = tags;
-    await post.save();
-
-    // const updateHashtagPromises = post.hashtags.forEach(async (tag) => {
-    //   tag.posts.push(post);
-    //   return tag.save();
-    // });
-
-    // await Promise.all(updateHashtagPromises).then((res) => {
-    //   console.log(`Done: Updating hashtag with ${res.length} posts..`);
-    // });
+    return post.save();
   });
 
-  console.log('Done: Updating posts `hashtags` and hashtag `posts`...');
+  const postsWithHashtags = await Promise.all(updatePostPromises2).then((res) => {
+    console.log(`Done: Updating ${res.length} post hashtags... `);
+    return res;
+  });
+
+  console.log('Done: Updating posts `hashtags`...');
+
+  console.log('Start: Updating hashtag `posts`...');
+
+  const hashtagsWithPosts = await Promise.all(
+    hashtagArr.map(async (tag) => {
+      const posts = await Post.find({ hashtags: tag }).exec();
+      tag.posts = posts;
+      return tag.save();
+    })
+  ).then((res) => {
+    console.log(`Done: Updating ${res.length} posts \`hashtags\` and hashtag \`posts\`...`);
+    return res;
+  });
 }
 
 init();
