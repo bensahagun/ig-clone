@@ -11,6 +11,7 @@ export interface IUser extends Document<Schema.Types.ObjectId> {
   followers: IUser[];
   usersFollowed: IUser[];
   posts: IPost[];
+  likedPosts: IPost[];
   dateCreated: Date;
   dateUpdated: Date;
 }
@@ -24,7 +25,8 @@ const schema = new mongoose.Schema({
   isNewUser: { type: Boolean, default: true },
   followers: [Schema.Types.ObjectId],
   usersFollowed: [Schema.Types.ObjectId],
-  posts: [Schema.Types.ObjectId],
+  posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
+  likedPosts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
   dateCreated: { type: Date, default: Date.now },
   dateUpdated: Date,
 });

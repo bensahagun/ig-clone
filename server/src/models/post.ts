@@ -1,7 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose';
 import { IUser } from './user';
 import { IComment } from './comment';
-import { ILike } from './like';
 import { IHashtag } from './hashtag';
 
 export interface IPost extends Document<Schema.Types.ObjectId> {
@@ -9,7 +8,7 @@ export interface IPost extends Document<Schema.Types.ObjectId> {
   photoURL: string;
   caption: string;
   comments: IComment[];
-  likes: ILike[];
+  likes: IUser[];
   hashtags: IHashtag[];
   dateCreated: Date;
   dateUpdated: Date;

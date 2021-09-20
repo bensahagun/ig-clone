@@ -85,8 +85,9 @@ async function init() {
     updateUserPromises.push(user.save());
   }
 
-  await Promise.all(updateUserPromises).then((res) => {
+  const usersWithPosts = await Promise.all(updateUserPromises).then((res) => {
     console.log('Done: Updating users `postIds` field ...');
+    return res;
   });
 
   //EMOJIS
@@ -148,7 +149,7 @@ async function init() {
 
   console.log('Start: Updating hashtag `posts`...');
 
-  const hashtagsWithPosts = await Promise.all(
+  await Promise.all(
     hashtagArr.map(async (tag) => {
       const posts = await Post.find({ hashtags: tag }).exec();
       tag.posts = posts;
@@ -158,6 +159,11 @@ async function init() {
     console.log(`Done: Updating ${res.length} posts \`hashtags\` and hashtag \`posts\`...`);
     return res;
   });
+
+  //Post Likes
+  // postsWithHashtags.map(post => {
+  //   post.likes
+  // })
 }
 
 init();
