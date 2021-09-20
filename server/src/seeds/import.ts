@@ -33,14 +33,14 @@ async function init() {
     }).save();
   });
 
-  const userArr = await Promise.all(userPromises).then((res) => {
+  const userArr: IUser[] = await Promise.all(userPromises).then((res) => {
     console.log(`Done: Adding ${res.length} users...`);
     return res;
   });
   //Posts
   console.log('Start: Add posts...');
 
-  const postPromises = posts.map((post, index) => {
+  const postPromises: Promise<IPost>[] = posts.map((post, index) => {
     return new Post({
       ...post,
       photoURL: `https://picsum.photos/seed/${post.seed}/1228/1228`,
@@ -52,7 +52,7 @@ async function init() {
     }).save();
   });
 
-  const postArr = await Promise.all(postPromises).then((res) => {
+  const postArr: IPost[] = await Promise.all(postPromises).then((res) => {
     console.log(`Done: Adding ${res.length} posts...`);
     return res;
   });
@@ -85,7 +85,7 @@ async function init() {
     updateUserPromises.push(user.save());
   }
 
-  const usersWithPosts = await Promise.all(updateUserPromises).then((res) => {
+  const usersWithPosts: IUser[] = await Promise.all(updateUserPromises).then((res) => {
     console.log('Done: Updating users `postIds` field ...');
     return res;
   });
@@ -101,12 +101,12 @@ async function init() {
 
   console.log('Start: Updating posts caption for emojis ...');
 
-  const updatePostPromises = postArr.map((post) => {
+  const updatePostPromises: Promise<IPost>[] = postArr.map((post) => {
     post.caption = post.caption.concat(' ', getEmojis());
     return post.save();
   });
 
-  const postsWithEmojis = await Promise.all(updatePostPromises).then((res) => {
+  const postsWithEmojis: IPost[] = await Promise.all(updatePostPromises).then((res) => {
     console.log(`Done: Updating emojis for ${res.length} posts...`);
     return res;
   });
@@ -122,7 +122,7 @@ async function init() {
     }).save();
   });
 
-  const hashtagArr = await Promise.all(hashtagPromises).then((res) => {
+  const hashtagArr: IHashtag[] = await Promise.all(hashtagPromises).then((res) => {
     console.log(`Done: Adding ${res.length} hashtags...`);
     return res;
   });
@@ -133,14 +133,14 @@ async function init() {
     return hashtagArr.sort(() => Math.random() - Math.random()).slice(0, Math.floor(Math.random() * 2) + 1);
   };
 
-  const updatePostPromises2 = postsWithEmojis.map((post: IPost) => {
+  const updatePostPromises2: Promise<IPost>[] = postsWithEmojis.map((post: IPost) => {
     const tags = getHashtags();
 
     post.hashtags = tags;
     return post.save();
   });
 
-  const postsWithHashtags = await Promise.all(updatePostPromises2).then((res) => {
+  const postsWithHashtags: IPost[] = await Promise.all(updatePostPromises2).then((res: IPost[]) => {
     console.log(`Done: Updating ${res.length} post hashtags... `);
     return res;
   });
@@ -161,9 +161,16 @@ async function init() {
   });
 
   //Post Likes
-  // postsWithHashtags.map(post => {
-  //   post.likes
-  // })
+  console.log('Start: Adding post likes ...');
+  const updatePostPromises3: Promise<IPost>[] = postsWithHashtags.map((post) => {
+    post.likes = usersWithPosts.sort(() => Math.random() - Math.random()).slice(0, Math.floor(Math.random() * 8) + 7);
+    return post.save();
+  });
+
+  const postsWithLikes: IPost[] = await Promise.all(updatePostPromises3).then((res) => {
+    console.log(`Done: Updating ${res.length} post.likes...`);
+    return res;
+  });
 }
 
 init();
