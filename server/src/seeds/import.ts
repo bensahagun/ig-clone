@@ -151,7 +151,7 @@ async function init() {
 
   await Promise.all(
     hashtagArr.map(async (tag) => {
-      const posts = await Post.find({ hashtags: tag }).exec();
+      const posts = await Post.find({ hashtags: tag.id }).exec();
       tag.posts = posts;
       return tag.save();
     })
@@ -169,6 +169,17 @@ async function init() {
 
   const postsWithLikes: IPost[] = await Promise.all(updatePostPromises3).then((res) => {
     console.log(`Done: Updating ${res.length} post.likes...`);
+    return res;
+  });
+
+  const updateUserPromises2: Promise<IUser>[] = usersWithPosts.map(async (user) => {
+    const posts = await Post.find({ likes: user.id }).exec();
+    user.likedPosts = posts;
+    return user.save();
+  });
+
+  const userWithLikedPosts: IUser[] = await Promise.all(updateUserPromises2).then((res) => {
+    console.log(`Done updating ${res.length} user.likedPosts...`);
     return res;
   });
 }
