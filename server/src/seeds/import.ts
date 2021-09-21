@@ -2,8 +2,9 @@ import users from './user.json';
 import posts from './posts.json';
 import hashtags from './hashtags.json';
 import emojis from './emojis.json';
+import comments from './comments.json';
 import { uri } from '../config/mongoose';
-import { User, Post, Comment, Hashtag, IPost, IUser, IHashtag } from '../models';
+import { User, Post, Comment, Hashtag, IPost, IUser, IHashtag, IComment } from '../models';
 import mongoose from 'mongoose';
 
 async function init() {
@@ -180,6 +181,48 @@ async function init() {
 
   const userWithLikedPosts: IUser[] = await Promise.all(updateUserPromises2).then((res) => {
     console.log(`Done updating ${res.length} user.likedPosts...`);
+    return res;
+  });
+
+  //Comments
+  console.log('Start: Adding comments...');
+
+  const commentPromises: Promise<IComment>[] = comments.map((comment) => {
+    return new Comment({
+      message: comment.message.concat(' ', getEmojis()),
+      user: userWithLikedPosts.sort(() => Math.random() - Math.random()).slice(0, 1)[0].id,
+      post: postsWithLikes.sort(() => Math.random() - Math.random()).slice(0, 1)[0].id,
+    }).save();
+  });
+
+  const commentsArr: IComment[] = await Promise.all(commentPromises).then((res: IComment[]) => {
+    console.log(`Done: Adding ${res.length} comments....`);
+    return res;
+  });
+
+  console.log('Start: Updating `user.comments` field...');
+
+  const updateUserPromises3: Promise<IUser>[] = userWithLikedPosts.map(async (user) => {
+    const comments = await Comment.find({ user: user.id }).exec();
+    user.comments = comments;
+    return user.save();
+  });
+
+  const userWithComments: IUser[] = await Promise.all(updateUserPromises3).then((res) => {
+    console.log(`Done: Updating ${res.length} user.comments field...`);
+    return res;
+  });
+
+  console.log('Start: Updating `post.comments` field...');
+
+  const updatePostPromises4: Promise<IPost>[] = postsWithLikes.map(async (post) => {
+    const comments = await Comment.find({ post: post.id }).exec();
+    post.comments = comments;
+    return post.save();
+  });
+
+  const postWithComments: IPost[] = await Promise.all(updatePostPromises4).then((res) => {
+    console.log(`Done: Updating ${res.length} post.comments field...`);
     return res;
   });
 }

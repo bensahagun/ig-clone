@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose';
 import { IPost } from './post';
+import { IComment } from './comment';
 
 export interface IUser extends Document<Schema.Types.ObjectId> {
   username: string;
@@ -12,6 +13,7 @@ export interface IUser extends Document<Schema.Types.ObjectId> {
   usersFollowed: IUser[];
   posts: IPost[];
   likedPosts: IPost[];
+  comments: IComment[];
   dateCreated: Date;
   dateUpdated: Date;
 }
@@ -27,6 +29,7 @@ const schema = new mongoose.Schema({
   usersFollowed: [Schema.Types.ObjectId],
   posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
   likedPosts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
+  comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
   dateCreated: { type: Date, default: Date.now },
   dateUpdated: Date,
 });
