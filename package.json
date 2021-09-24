@@ -1,0 +1,23 @@
+{
+  "name": "ig-clone",
+  "version": "1.0.0",
+  "description": "This app is created using using MongoDB, and Apollo GraphQL for backend. React and Semantic UI for frontend. Firebase for auth.",
+  "scripts": {
+    "dev:server": "cd ./server && yarn run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bensahagun/ig-clone.git"
+  },
+  "keywords": [
+    "instagram",
+    "ig clone",
+    "instagram mongodb express graphql"
+  ],
+  "author": "https://github.com/bensahagun/",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bensahagun/ig-clone/issues"
+  },
+  "homepage": "https://github.com/bensahagun/ig-clone#readme"
+}
