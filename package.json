@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "This app is created using using MongoDB, and Apollo GraphQL for backend. React and Semantic UI for frontend. Firebase for auth.",
   "scripts": {
-    "dev:server": "cd ./server && yarn run dev"
+    "dev:server": "cd ./server && yarn run dev",
+    "dev:client": "cd ./client && yarn run start"
   },
   "repository": {
     "type": "git",
