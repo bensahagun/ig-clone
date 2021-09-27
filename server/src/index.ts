@@ -1,10 +1,18 @@
-import { startServer } from './graphql/server';
+import { ApolloServer } from 'apollo-server';
+import { getUser } from './utils';
+import typeDefs from './graphql/typeDefs';
+import resolvers from './graphql/resolvers';
 
-const main = async () => {
-  const server = await startServer();
-  server.listen().then(({ url }) => {
-    console.log(`🚀  Server ready at ${url}`);
-  });
-};
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: async (req) => {
+    const user = await getUser(req);
+    return { ...req, user };
+  },
+  introspection: true,
+});
 
-main();
+server.listen().then(({ url }) => {
+  console.log(`🚀 Server ready at ${url}`);
+});
