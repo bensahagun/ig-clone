@@ -24,7 +24,7 @@ export const SignIn: React.FC = () => {
 
   return user ? (
     <div>
-      {user.displayName} <button onClick={signOut}>Go Sign Out</button>
+      {JSON.stringify(user)} <button onClick={signOut}>Go Sign Out</button>
     </div>
   ) : (
     <div>

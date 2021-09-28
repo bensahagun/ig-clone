@@ -1,4 +1,3 @@
-import { ExpressContext } from 'apollo-server-express';
 import { verifyUserSessionToken } from './firebase';
 
 export interface Context {
@@ -11,11 +10,17 @@ export interface Auth {
 }
 
 export async function getUser(ctx: Context) {
-  const Authorization = ctx.req.get('Authorization');
-  if (Authorization) {
-    const token = Authorization.replace('Bearer ', '');
-    const { id, admin } = (await verifyUserSessionToken(token)) as Auth;
-    return { id, admin };
+  const authorization = ctx.req.get('Authorization');
+  if (authorization) {
+    const token = authorization.replace('Bearer ', '');
+    const user = await verifyUserSessionToken(token);
+    return user;
   }
   return null;
+}
+
+export class AuthError extends Error {
+  constructor(error: { message: string; stack?: any } = { message: 'Not authorized' }) {
+    super(error.message);
+  }
 }

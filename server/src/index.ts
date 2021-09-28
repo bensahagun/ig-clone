@@ -8,7 +8,7 @@ const server = new ApolloServer({
   resolvers,
   context: async (req) => {
     const user = await getUser(req);
-    return { ...req, user };
+    return { user };
   },
   introspection: true,
 });
