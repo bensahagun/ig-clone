@@ -4,7 +4,7 @@ import { AuthError, Context } from '../utils';
 const resolvers = {
   Query: {
     users: (_, __, ctx: Context) => {
-      return [{ username: 'ben', fullName: 'ben sah', ctx }];
+      return [{ uid: ctx.user.uid, email: ctx.user.email, phone: ctx.user.phone }];
     },
   },
   Mutation: {

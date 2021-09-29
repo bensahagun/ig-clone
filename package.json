@@ -21,5 +21,6 @@
     "url": "https://github.com/bensahagun/ig-clone/issues"
   },
   "homepage": "https://github.com/bensahagun/ig-clone#readme",
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {}
 }

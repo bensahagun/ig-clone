@@ -18,8 +18,7 @@ const typeDefs = gql`
   type User {
     uid: String
     email: String
-    displayName: String
-    phoneNumber: String
+    phone: String
   }
 `;
 export default typeDefs;

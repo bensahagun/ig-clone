@@ -2,18 +2,19 @@ import { verifyUserSessionToken } from './firebase';
 
 export interface Context {
   req: any;
+  user: Auth;
 }
 
 export interface Auth {
-  id: string;
+  uid: string;
   [key: string]: any;
 }
 
-export async function getUser(ctx: Context) {
-  const authorization = ctx.req.get('Authorization');
+export async function getUser(ctx) {
+  const authorization = (ctx.req || ctx.request).get('Authorization');
   if (authorization) {
     const token = authorization.replace('Bearer ', '');
-    const user = await verifyUserSessionToken(token);
+    const user = (await verifyUserSessionToken(token)) as Auth;
     return user;
   }
   return null;

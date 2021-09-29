@@ -27,12 +27,13 @@ const createUserSessionToken = async (idToken: string, ctx: any) => {
 
 const verifyUserSessionToken = async (token: string) => {
   try {
-    const user = await app.auth().verifySessionCookie(token, true /** checkRevoked */);
+    const { uid, phone_number, email } = await app.auth().verifySessionCookie(token, true /** checkRevoked */);
 
-    if (user.id) return user;
-    throw new Error('User Session Token Verification Error');
-  } catch (error) {
-    console.log((error as any).message);
+    if (uid) return { uid, phone_number, email };
+
+    return null;
+  } catch (error: any) {
+    throw new Error('User Session Token Verification Error:' + error.message);
   }
 };
 
