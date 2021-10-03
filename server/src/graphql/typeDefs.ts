@@ -5,9 +5,20 @@ const typeDefs = gql`
     users: [User]
   }
 
+  type Mutation {
+    signUp(idToken: String): AuthPayload
+    signIn(idToken: String): AuthPayload
+  }
+
+  type AuthPayload {
+    token: String
+    user: User
+  }
+
   type User {
-    username: String
-    fullName: String
+    uid: String
+    email: String
+    phone: String
   }
 `;
 export default typeDefs;
